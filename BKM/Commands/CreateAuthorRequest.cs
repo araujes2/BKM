@@ -5,7 +5,7 @@ using System;
 
 namespace BKM.API
 {
-    public class CreateAuthorRequest : RequestBase, IRequest<CreateAuthorResponse>
+    public class CreateAuthorRequest : IRequest<CreateAuthorResponse>
     {
         public string ID { get; set; }
         public string Name { get; set; }

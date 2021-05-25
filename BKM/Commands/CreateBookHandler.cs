@@ -24,7 +24,7 @@ namespace BKM.API
             var response = new CreateBookResponse()
             {
                 Date = DateTime.Now,
-                Requester = request.Requester,
+                Requester = "",
                 Message = "Successful"
             };
 

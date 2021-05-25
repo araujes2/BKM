@@ -5,7 +5,7 @@ using System;
 
 namespace BKM.API
 {
-    public class CreateBookRequest : RequestBase, IRequest<CreateBookResponse>
+    public class CreateBookRequest : IRequest<CreateBookResponse>
     {
         public string ISBM { get; set; }
         public string Title { get; set; }

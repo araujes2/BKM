@@ -1,11 +1,13 @@
 using BKM.API;
 using BKM.Core.Interfaces;
 using EDAP.Infrastructure.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 namespace BKM.API
 {
@@ -25,6 +27,8 @@ namespace BKM.API
             var options = serviceConfiguration.Get<ServiceOptions>();
 
             services.AddScoped<IRepositoryProvider>(s => new RepositoryProvider(options.ConnectionString));
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddControllers();
         }
