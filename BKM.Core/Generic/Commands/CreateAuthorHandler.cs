@@ -1,23 +1,29 @@
 ﻿using AutoMapper;
 using BKM.Core.DTO;
 using BKM.Core.Entities;
+using BKM.Core.Generic;
 using BKM.Core.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BKM.API
+namespace BKM.Core.Generic
 {
-    public class CreateAuthorHandler : IRequestHandler<CreateAuthorRequest, CreateAuthorResponse>
+    public class CreateAuthorHandler : IRequestHandler<CreateAuthorCommandRequest, CreateAuthorResponse>
     {
         private readonly IRepositoryProvider _repositoryProvider;
+        private readonly IMemoryCache _cache;
         private readonly IMapper _mapper;
-        public CreateAuthorHandler(IRepositoryProvider repositoryProvider)
+        public CreateAuthorHandler(IRepositoryProvider repositoryProvider, IMapper mapper, IMemoryCache cache)
         {
             _repositoryProvider = repositoryProvider;
+            _mapper = mapper;
+            _cache = cache;
         }
-        public async Task<CreateAuthorResponse> Handle(CreateAuthorRequest request, CancellationToken cancellationToken)
+        public async Task<CreateAuthorResponse> Handle(CreateAuthorCommandRequest request, CancellationToken cancellationToken)
         {
             var response = new CreateAuthorResponse()
             {
@@ -35,9 +41,9 @@ namespace BKM.API
                     DateOfBirth = request.DateOfBirth
                 });
 
-                await _repositoryProvider.UoW.SaveChangesAsync();
+                _repositoryProvider.UoW.SaveChanges();
 
-                await OnAuthorAdded(author);
+                OnAuthorAdded(author);
 
                 response.Result = _mapper.Map<DtoAuthor>(author);
 
@@ -51,9 +57,19 @@ namespace BKM.API
 
         }
 
-        private Task OnAuthorAdded(Author author)
+        private void OnAuthorAdded(Author author)
         {
-            return Task.CompletedTask;
+            UpdateCache(author);
+            SendToServiceBus(author);
+        }
+
+        private void UpdateCache(Author author)
+        {
+            _cache.Set(CacheKeys.Authors, _repositoryProvider.Author.Load().ToList());
+        }
+        private void SendToServiceBus(Author author)
+        {
+
         }
 
     }

@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.Extensions.Logging;
+using System;
+using BKM.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using BKM.Core.Entities;
+using BKM.Core.Generic;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BKM.API.Controllers
 {
@@ -12,24 +16,36 @@ namespace BKM.API.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        // GET: api/<AuthorController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ILogger _logger;
+        private readonly IRepositoryProvider _repositoryProvider;
+        public AuthorsController([FromServices] IRepositoryProvider repositoryProvider, ILogger<AuthorsController> logger)
         {
-            return new string[] { "value1", "value2" };
+            _logger = logger;
+            _repositoryProvider = repositoryProvider;
         }
 
-        // GET api/<AuthorController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        public async Task<IEnumerable<Author>> Get([FromServices] IMemoryCache cache)
         {
-            return "value";
+            _logger.LogInformation($"Executing [GET] api/authors at { DateTime.Now  }");
+            return await cache.GetOrCreateAsync(CacheKeys.Authors, entry =>
+            {
+                return _repositoryProvider.Author.Load().ToListAsync();
+            });
+        }
+
+        [HttpGet("{ID}")]
+        public async Task<Author> Get([FromQuery] string ID)
+        {
+            _logger.LogInformation($"Executing [GET] api/authors/{ID} at { DateTime.Now  }");
+            return await _repositoryProvider.Author.Load().FirstOrDefaultAsync(m => m.ID == ID);
         }
 
         [HttpPost]
-        public Task<CreateAuthorResponse> Post([FromServices] IMediator mediator, [FromBody] CreateAuthorRequest request)
+        public async Task<CreateAuthorResponse> Post([FromServices] IMediator mediator, [FromBody] CreateAuthorCommandRequest request)
         {
-            return mediator.Send(request);
+            _logger.LogInformation($"Executing [POST] api/authors at { DateTime.Now  }");
+            return await mediator.Send(request);
         }
 
     }

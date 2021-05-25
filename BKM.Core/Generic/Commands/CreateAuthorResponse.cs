@@ -1,9 +1,9 @@
 ﻿using BKM.Core.DTO;
 using BKM.Core.Generic;
 
-namespace BKM.API
+namespace BKM.Core.Generic
 {
-    public class CreateAuthorResponse : ResponseBase
+    public class CreateAuthorResponse : CommandResponseBase
     {
         public DtoAuthor Result { get; set; }
     }

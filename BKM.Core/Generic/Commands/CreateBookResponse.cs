@@ -1,9 +1,9 @@
 ﻿using BKM.Core.DTO;
 using BKM.Core.Generic;
 
-namespace BKM.API
+namespace BKM.Core.Generic
 {
-    public class CreateBookResponse : ResponseBase
+    public class CreateBookResponse : CommandResponseBase
     {
         public DtoBook Result { get; set; }
     }
