@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BKM.Core.Entities;
 using Microsoft.Extensions.Caching.Memory;
 using BKM.Core.Generic;
+using BKM.Core.Commands;
 
 namespace BKM.API.Controllers
 {
@@ -34,18 +35,19 @@ namespace BKM.API.Controllers
             });
         }
 
-        [HttpGet("{ISBM}")]
-        public async Task<Book> Get([FromQuery] string ISBM)
+        [HttpGet("{ISBM}", Name = "GetBook")]
+        public async Task<IActionResult> Get([FromQuery] string ISBM)
         {
             _logger.LogInformation($"Executing [GET] api/Books/{ISBM} at { DateTime.Now  }");
-            return await _repositoryProvider.Book.Load().FirstOrDefaultAsync(m => m.ISBM == ISBM);
+            return Ok(await _repositoryProvider.Book.Load().FirstOrDefaultAsync(m => m.ISBM == ISBM));
         }
 
         [HttpPost]
-        public async Task<CreateBookResponse> Post([FromServices] IMediator mediator, [FromBody] CreateBookCommandRequest request)
+        public async Task<IActionResult> Post([FromServices] IMediator mediator, [FromBody] CreateBookCommand command)
         {
-            _logger.LogInformation($"Executing [POST] api/Books at { DateTime.Now  }");
-            return await mediator.Send(request);
+            _logger.LogInformation($"Executing [POST] api/books at { DateTime.Now  }");
+            var output = await mediator.Send(command);
+            return StatusCode(output.Status, output);
         }
 
     }

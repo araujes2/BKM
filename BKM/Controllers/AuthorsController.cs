@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BKM.Core.Entities;
 using BKM.Core.Generic;
 using Microsoft.Extensions.Caching.Memory;
+using BKM.Core.Commands;
 
 namespace BKM.API.Controllers
 {
@@ -34,18 +35,19 @@ namespace BKM.API.Controllers
             });
         }
 
-        [HttpGet("{ID}")]
-        public async Task<Author> Get([FromQuery] string ID)
+        [HttpGet("{ID}", Name = "GetAuthor")]
+        public async Task<IActionResult> Get([FromQuery] string ID)
         {
             _logger.LogInformation($"Executing [GET] api/authors/{ID} at { DateTime.Now  }");
-            return await _repositoryProvider.Author.Load().FirstOrDefaultAsync(m => m.ID == ID);
+            return Ok(await _repositoryProvider.Author.Load().FirstOrDefaultAsync(m => m.ID == ID));
         }
 
         [HttpPost]
-        public async Task<CreateAuthorResponse> Post([FromServices] IMediator mediator, [FromBody] CreateAuthorCommandRequest request)
+        public async Task<IActionResult> Post([FromServices] IMediator mediator, [FromBody] CreateAuthorCommand command)
         {
             _logger.LogInformation($"Executing [POST] api/authors at { DateTime.Now  }");
-            return await mediator.Send(request);
+            var output = await mediator.Send(command);
+            return StatusCode(output.Status, output);
         }
 
     }

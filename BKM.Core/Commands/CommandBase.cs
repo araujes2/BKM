@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace BKM.Core.Generic
+namespace BKM.Core.Commands
 {
-    public abstract class CommandRequestBase
+    public abstract class CommandBase
     {
         public abstract bool IsValid();
     }

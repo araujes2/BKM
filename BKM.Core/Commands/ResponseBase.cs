@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace BKM.Core.Generic
+namespace BKM.Core.Commands
 {
-    public abstract class CommandResponseBase
+    public abstract class ResponseBase
     {
+        public int Status { get; set; }
         public string Requester { get; set; }
         public DateTime Date { get; set; }
         public string Message { get; set; }
