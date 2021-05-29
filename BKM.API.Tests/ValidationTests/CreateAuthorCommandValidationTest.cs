@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace BKM.API.Tests
 {
     [TestFixture]
-    public class CreateAuthorCommandValidationTest : HandlerTestBase
+    public class CreateAuthorCommandValidationTest : TestBase
     {
         public CreateAuthorCommandValidationTest() : base()
         {

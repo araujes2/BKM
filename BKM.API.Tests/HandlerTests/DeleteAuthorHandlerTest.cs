@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BKM.API.Tests
 {
     [TestFixture]
-    public class DeleteAuthorHandlerTest : HandlerTestBase
+    public class DeleteAuthorHandlerTest : TestBase
     {
         protected DeleteAuthorHandler _handler;
         public DeleteAuthorHandlerTest() : base()
@@ -18,7 +18,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("Author2")]
-        public async Task Can_delete_author(string ID)
+        public async Task Can_delete_author_HTTP200(string ID)
         {
             var command = new DeleteAuthorCommand()
             {
@@ -31,7 +31,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("Author1")]
-        public async Task Cannot_delete_author_with_books(string ID)
+        public async Task Cannot_delete_author_with_books_HTTP400(string ID)
         {
             var command = new DeleteAuthorCommand()
             {
@@ -45,7 +45,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("")]
-        public async Task Cannot_delete_author_with_invalid_input(string ID)
+        public async Task Cannot_delete_author_with_invalid_input_HTTP400(string ID)
         {
             var command = new DeleteAuthorCommand()
             {

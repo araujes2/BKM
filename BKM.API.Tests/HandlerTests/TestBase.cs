@@ -11,12 +11,12 @@ using System;
 
 namespace BKM.API.Tests
 {
-    public abstract class HandlerTestBase : IDisposable
+    public abstract class TestBase : IDisposable
     {
         protected IMapper _mapper;
         protected IRepositoryProvider _repositoryProvider;
 
-        public HandlerTestBase()
+        public TestBase()
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {

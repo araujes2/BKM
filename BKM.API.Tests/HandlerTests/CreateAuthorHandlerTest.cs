@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BKM.API.Tests
 {
     [TestFixture]
-    public class CreateAuthorHandlerTest : HandlerTestBase
+    public class CreateAuthorHandlerTest : TestBase
     {
         protected CreateAuthorHandler _handler;
         public CreateAuthorHandlerTest() : base()
@@ -18,7 +18,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("Author4", "NameAuthor4", "09/25/1987")]
-        public async Task Can_add_author(string ID, string name, DateTime dateOfBirth)
+        public async Task Can_add_author_HTTP201(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {
@@ -33,7 +33,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("Author1", "NameAuthor1", "09/25/1987")]
-        public async Task Cannot_add_existing_author(string ID, string name, DateTime dateOfBirth)
+        public async Task Cannot_add_existing_author_HTTP400(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BKM.API.Tests
 {
     [TestFixture]
-    public class DeleteBookHandlerTest : HandlerTestBase
+    public class DeleteBookHandlerTest : TestBase
     {
         protected DeleteBookHandler _handler;
         public DeleteBookHandlerTest() : base()
@@ -18,7 +18,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("Book1")]
-        public async Task Can_delete_book(string ISBM)
+        public async Task Can_delete_book_HTTP200(string ISBM)
         {
             var command = new DeleteBookCommand()
             {
@@ -31,7 +31,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("")]
-        public async Task Cannot_delete_book_with_invalid_input(string ISBM)
+        public async Task Cannot_delete_book_with_invalid_input_HTTP400(string ISBM)
         {
             var command = new DeleteBookCommand()
             {

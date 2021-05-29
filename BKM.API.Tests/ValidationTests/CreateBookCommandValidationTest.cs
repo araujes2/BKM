@@ -6,7 +6,7 @@ using System;
 namespace BKM.API.Tests
 {
     [TestFixture]
-    public class CreateBookCommandValidationTest : HandlerTestBase
+    public class CreateBookCommandValidationTest : TestBase
     {
         public CreateBookCommandValidationTest() : base()
         {
