@@ -1,4 +1,6 @@
 using BKM.Core.Commands;
+using BKM.Core.Handlers;
+using BKM.Core.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using System;
@@ -10,21 +12,22 @@ namespace BKM.API.Tests
     [TestFixture]
     public class CreateAuthorHandlerTest : TestBase
     {
-        protected CreateAuthorHandler _handler;
+        protected ICreateAuthorHandler _handler;
         public CreateAuthorHandlerTest() : base()
         {
             _handler = new CreateAuthorHandler(_repositoryProvider, _mapper, new MemoryCache(new MemoryCacheOptions()));
         }
 
         [Test]
-        [TestCase("Author4", "NameAuthor4", "09/25/1987")]
+        [TestCase("00852760302", "NameAuthor4", "09/25/1987")]
         public async Task Can_add_author_HTTP201(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {
                 ID = ID,
                 Name = name,
-                DateOfBirth = dateOfBirth
+                DateOfBirth = dateOfBirth,
+                Today = DateTime.Today
             };
 
             var response = await _handler.Handle(command, CancellationToken.None);
@@ -39,7 +42,8 @@ namespace BKM.API.Tests
             {
                 ID = ID,
                 Name = name,
-                DateOfBirth = dateOfBirth
+                DateOfBirth = dateOfBirth,
+                Today = DateTime.Today
             };
 
             var response = await _handler.Handle(command, CancellationToken.None);

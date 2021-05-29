@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BKM.Core.Commands
+namespace BKM.Core.Responses
 {
     public abstract class ResponseBase
     {

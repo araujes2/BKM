@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using BKM.Core.Commands;
 using BKM.Core.DTO;
 using BKM.Core.Entities;
 using BKM.Core.Generic;
 using BKM.Core.Interfaces;
+using BKM.Core.Responses;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -10,9 +12,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BKM.Core.Commands
+namespace BKM.Core.Handlers
 {
-    public class CreateBookHandler : IRequestHandler<CreateBookCommand, CreateBookResponse>
+    public class CreateBookHandler : ICreateBookHandler
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IMemoryCache _cache;
@@ -73,17 +75,7 @@ namespace BKM.Core.Commands
 
         private void OnBookAdded(Book book)
         {
-            UpdateCache(book);
-            SendToServiceBus(book);
-        }
-
-        private void UpdateCache(Book book)
-        {
             _cache.Set(CacheKeys.Books, _repositoryProvider.Book.Load().ToList());
-        }
-        private void SendToServiceBus(Book book)
-        {
-         
         }
     }
 }

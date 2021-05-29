@@ -15,7 +15,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("00852760302", "NameAuthorValidation", "09/25/1987")]
-        public async Task Is_valid_author(string ID, string name, DateTime dateOfBirth)
+        public void Is_valid_author(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {
@@ -30,7 +30,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("", "NameAuthorValidation", "09/25/1987")]
-        public async Task Is_not_valid_when_id_is_null_or_empty(string ID, string name, DateTime dateOfBirth)
+        public void Is_not_valid_when_id_is_null_or_empty(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {
@@ -45,7 +45,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("00852760302", "", "09/25/1987")]
-        public async Task Is_not_valid_when_name_is_null_or_empty(string ID, string name, DateTime dateOfBirth)
+        public void Is_not_valid_when_name_is_null_or_empty(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {
@@ -60,7 +60,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("00852760302", "NameAuthorValidation", "09/25/2021")]
-        public async Task Is_not_valid_when_date_of_birth_is_lower_30(string ID, string name, DateTime dateOfBirth)
+        public void Is_not_valid_when_date_of_birth_is_lower_30(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {
@@ -75,7 +75,7 @@ namespace BKM.API.Tests
 
         [Test]
         [TestCase("Author1", "NameAuthor1", "09/25/1987")]
-        public async Task Is_not_valid_when_author_exists(string ID, string name, DateTime dateOfBirth)
+        public void Is_not_valid_when_author_exists(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()
             {

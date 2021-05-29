@@ -1,5 +1,7 @@
 using BKM.Core.Commands;
 using BKM.Core.Generic;
+using BKM.Core.Handlers;
+using BKM.Core.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using System;
@@ -11,7 +13,7 @@ namespace BKM.API.Tests
     [TestFixture]
     public class CreateBookHandlerTest : TestBase
     {
-        protected CreateBookHandler _handler;
+        protected ICreateBookHandler _handler;
         public CreateBookHandlerTest() : base()
         {
             _handler = new CreateBookHandler(_repositoryProvider, _mapper, new MemoryCache(new MemoryCacheOptions()));
@@ -65,7 +67,7 @@ namespace BKM.API.Tests
             };
 
             var response = await _handler.Handle(command, CancellationToken.None);
-            Assert.AreEqual(404, response.Status);
+            Assert.AreEqual(400, response.Status);
 
         }
 

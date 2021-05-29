@@ -10,6 +10,7 @@ using BKM.Core.Entities;
 using Microsoft.Extensions.Caching.Memory;
 using BKM.Core.Generic;
 using BKM.Core.Commands;
+using BKM.API.Utilities;
 
 namespace BKM.API.Controllers
 {
@@ -43,6 +44,7 @@ namespace BKM.API.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(QueueMessageActionFilter))]
         public async Task<IActionResult> Post([FromServices] IMediator mediator, [FromBody] CreateBookCommand command)
         {
             _logger.LogInformation($"Executing [POST] api/books at { DateTime.Now  }");

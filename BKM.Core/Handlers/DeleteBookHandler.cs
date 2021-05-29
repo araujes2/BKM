@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BKM.Core.Commands;
 using BKM.Core.Generic;
 using BKM.Core.Interfaces;
+using BKM.Core.Responses;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -8,9 +10,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BKM.Core.Commands
+namespace BKM.Core.Handlers
 {
-    public class DeleteBookHandler : IRequestHandler<DeleteBookCommand, DeleteBookResponse>
+    public class DeleteBookHandler : IDeleteBookHandler
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IMemoryCache _cache;
@@ -32,14 +34,8 @@ namespace BKM.Core.Commands
 
             try
             {
-                if(command.IsValid())
+                if (_repositoryProvider.Book.Load().FirstOrDefault(m => m.ISBM == command.ISBM) != null)
                 {
-                    if (_repositoryProvider.Book.Load().FirstOrDefault(m => m.ISBM == command.ISBM) == null)
-                    {
-                        response.Status = 404;
-                        throw new Exception("Book Not Found");
-                    }
-
                     _repositoryProvider.Book.Remove(command.ISBM);
 
                     await _repositoryProvider.UoW.SaveChangesAsync();
@@ -51,12 +47,13 @@ namespace BKM.Core.Commands
                 else
                 {
                     response.Status = 400;
-                    response.Message = "Invalid Command";
+                    response.Message = "Book not found";
                 }
 
             }
             catch (Exception ex)
             {
+                response.Status = 500;
                 response.Message = ex.Message;
             }
 

@@ -1,4 +1,6 @@
 using BKM.Core.Commands;
+using BKM.Core.Handlers;
+using BKM.Core.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using System;
@@ -10,7 +12,7 @@ namespace BKM.API.Tests
     [TestFixture]
     public class DeleteBookHandlerTest : TestBase
     {
-        protected DeleteBookHandler _handler;
+        protected IDeleteBookHandler _handler;
         public DeleteBookHandlerTest() : base()
         {
             _handler = new DeleteBookHandler(_repositoryProvider, new MemoryCache(new MemoryCacheOptions()));

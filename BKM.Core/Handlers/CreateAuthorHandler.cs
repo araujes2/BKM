@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using BKM.Core.Commands;
 using BKM.Core.DTO;
 using BKM.Core.Entities;
 using BKM.Core.Generic;
 using BKM.Core.Interfaces;
+using BKM.Core.Responses;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -10,9 +12,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BKM.Core.Commands
+namespace BKM.Core.Handlers
 {
-    public class CreateAuthorHandler : IRequestHandler<CreateAuthorCommand, CreateAuthorResponse>
+    public class CreateAuthorHandler : ICreateAuthorHandler
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IMemoryCache _cache;
@@ -23,6 +25,7 @@ namespace BKM.Core.Commands
             _mapper = mapper;
             _cache = cache;
         }
+
         public async Task<CreateAuthorResponse> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
         {
             var response = new CreateAuthorResponse()
@@ -70,18 +73,7 @@ namespace BKM.Core.Commands
 
         private void OnAuthorAdded(Author author)
         {
-            UpdateCache(author);
-            SendToServiceBus(author);
-        }
-
-        private void UpdateCache(Author author)
-        {
             _cache.Set(CacheKeys.Authors, _repositoryProvider.Author.Load().ToList());
         }
-        private void SendToServiceBus(Author author)
-        {
-
-        }
-
     }
 }

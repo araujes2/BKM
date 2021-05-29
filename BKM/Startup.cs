@@ -1,4 +1,5 @@
 using BKM.API;
+using BKM.API.Utilities;
 using BKM.Core.Interfaces;
 using BKM.Infrastructure.EntityFramework;
 using EDAP.Infrastructure.Repositories;
@@ -29,7 +30,7 @@ namespace BKM.API
             var options = serviceConfiguration.Get<ServiceOptions>();
 
             var dbOptions = new DbContextOptionsBuilder<BKMContext>()
-               .UseSqlServer(options.ConnectionString)
+               .UseSqlServer(options.SqlConnectionString)
                .Options;
 
             services.AddScoped<IRepositoryProvider>(s => new RepositoryProvider(dbOptions));
@@ -39,6 +40,8 @@ namespace BKM.API
             services.AddAutoMapper(typeof(Startup));
 
             services.AddMemoryCache();
+
+            services.AddScoped<QueueMessageActionFilter>();
 
             services.AddControllers();
         }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using BKM.Core.Commands;
 using BKM.Core.Generic;
 using BKM.Core.Interfaces;
+using BKM.Core.Responses;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -8,9 +10,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BKM.Core.Commands
+namespace BKM.Core.Handlers
 {
-    public class DeleteAuthorHandler : IRequestHandler<DeleteAuthorCommand, DeleteAuthorResponse>
+    public class DeleteAuthorHandler : IDeleteAuthorHandler
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IMemoryCache _cache;
@@ -32,22 +34,10 @@ namespace BKM.Core.Commands
 
             try
             {
-                if(command.IsValid())
+                var validation = new DeleteAuthorCommandValidation(_repositoryProvider, command);
+
+                if (validation.IsValid())
                 {
-                    var author = _repositoryProvider.Author.Load().FirstOrDefault(m => m.ID == command.ID);
-
-                    if (author == null)
-                    {
-                        response.Status = 404;
-                        throw new Exception("Author Not Found");
-                    }
-
-                    if (author.Books.Any())
-                    {
-                        response.Status = 400;
-                        throw new Exception("Cannot remove author with books");
-                    }
-
                     _repositoryProvider.Author.Remove(command.ID);
 
                     await _repositoryProvider.UoW.SaveChangesAsync();
@@ -59,12 +49,13 @@ namespace BKM.Core.Commands
                 else
                 {
                     response.Status = 400;
-                    response.Message = "Invalid Command";
+                    response.Message = string.Join("; ", validation.Errors);
                 }
 
             }
             catch (Exception ex)
             {
+                response.Status = 500;
                 response.Message = ex.Message;
             }
 

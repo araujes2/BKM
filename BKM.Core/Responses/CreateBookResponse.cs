@@ -1,7 +1,7 @@
 ﻿using BKM.Core.DTO;
 using BKM.Core.Generic;
 
-namespace BKM.Core.Commands
+namespace BKM.Core.Responses
 {
     public class CreateBookResponse : ResponseBase
     {

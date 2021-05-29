@@ -1,4 +1,4 @@
-﻿namespace BKM.Core.Commands
+﻿namespace BKM.Core.Responses
 {
     public class DeleteBookResponse : ResponseBase
     {

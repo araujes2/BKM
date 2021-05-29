@@ -1,16 +1,13 @@
 ﻿
 using BKM.Core.Generic;
+using BKM.Core.Responses;
 using MediatR;
 using System;
 
 namespace BKM.Core.Commands
 {
-    public class DeleteAuthorCommand : CommandBase, IRequest<DeleteAuthorResponse>
+    public class DeleteAuthorCommand : IRequest<DeleteAuthorResponse>
     {
         public string ID { get; set; }
-        public override bool IsValid()
-        {
-            return string.IsNullOrEmpty(ID) == false;
-        }
     }
 }

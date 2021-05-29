@@ -5,6 +5,8 @@ namespace BKM.API
     public class ServiceOptions
     {
         public const string Configurations = "Configurations";
-        public string ConnectionString { get; set; }
+        public string SqlConnectionString { get; set; }
+        public string StorageConnectionString { get; set; }
+        public string QueueName { get; set; }
     }
 }
