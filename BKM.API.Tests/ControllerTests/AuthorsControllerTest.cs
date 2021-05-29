@@ -1,6 +1,5 @@
 
 using BKM.Core.Commands;
-using BKM.Core.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -35,7 +34,7 @@ namespace BKM.API.Tests
 
         [Test]
         [Order(0)]
-        public async Task TestGet()
+        public async Task Can_get_authors()
         {
             // arrange
             var request = new HttpRequestMessage(HttpMethod.Get, "api/authors");
@@ -51,8 +50,8 @@ namespace BKM.API.Tests
 
         [Test]
         [Order(1)]
-        [TestCase("1", "AuthorNameTest", "2021/1/1")]
-        public async Task TestPost(string ID, string name, DateTime dateOfBirth)
+        [TestCase("AuthorTest", "AuthorNameTest", "2021/1/1")]
+        public async Task Can_add_author(string ID, string name, DateTime dateOfBirth)
         {
             // arrange
             var command = new CreateAuthorCommand()
@@ -62,7 +61,7 @@ namespace BKM.API.Tests
                 DateOfBirth = dateOfBirth
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "api/autors");
+            var request = new HttpRequestMessage(HttpMethod.Post, "api/authors");
             var contentString = JsonConvert.SerializeObject(command);
             request.Content = new StringContent(contentString, Encoding.UTF8, "application/json");
 

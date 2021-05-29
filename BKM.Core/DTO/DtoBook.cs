@@ -12,5 +12,7 @@ namespace BKM.Core.DTO
         public BookCategory Category { get; set; }
         public DateTime LaunchDate { get; set; }
         public string AuthorID { get; set; }
+        public string AuthorName { get; set; }
+        public DateTime AuthorDateOfBirth { get; set; }
     }
 }

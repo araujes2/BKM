@@ -50,5 +50,13 @@ namespace BKM.API.Controllers
             return StatusCode(output.Status, output);
         }
 
+        [HttpDelete("{ISBM}")]
+        public async Task<IActionResult> Delete([FromServices] IMediator mediator, [FromQuery] DeleteBookCommand command)
+        {
+            _logger.LogInformation($"Executing [DELETE] api/books/{command.ISBM} at { DateTime.Now  }");
+            var output = await mediator.Send(command);
+            return StatusCode(output.Status, output);
+        }
+
     }
 }

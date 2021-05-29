@@ -1,7 +1,9 @@
 ﻿
+using System;
+
 namespace BKM.Core.Interfaces
 {
-    public interface IRepositoryProvider
+    public interface IRepositoryProvider : IDisposable
     {
         IUnitOfWork UoW { get; }
         IBookRepository Book { get; }

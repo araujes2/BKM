@@ -10,6 +10,7 @@ namespace BKM.Core.Commands
         public string ID { get; set; }
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public DateTime? Today { get; set; }
         public override bool IsValid()
         {
             //Regex rgx = new Regex(@"^[a-zA-Z0-9]\d{2}[a-zA-Z0-9](-\d{3}){2}[A-Za-z0-9]$");
@@ -19,7 +20,7 @@ namespace BKM.Core.Commands
             //    throw new Exception("ISBM inválido");
             //}
 
-            return string.IsNullOrEmpty(Name) == false & DateOfBirth > new DateTime(1990, 1, 1);
+            return string.IsNullOrEmpty(Name) == false & DateOfBirth < new DateTime(1990, 1, 1);
         }
     }
 }

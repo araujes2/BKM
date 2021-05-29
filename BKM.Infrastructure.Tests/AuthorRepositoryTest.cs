@@ -54,7 +54,7 @@ namespace BKM.Infrastructure.Tests
                 three.Books.Add(new Book()
                 {
                     Category = BookCategory.Category3,
-                    ISBM = "1234",
+                    ISBM = "Book2",
                     Title = "TitleB3",
                     LaunchDate = DateTime.Now
                 });

@@ -28,7 +28,7 @@ namespace BKM.Core.Commands
         {
             var response = new CreateBookResponse()
             {
-                Status = 200,
+                Status = 201,
                 Date = DateTime.Now,
                 Requester = "",
                 Message = "Successful"
@@ -36,20 +36,10 @@ namespace BKM.Core.Commands
 
             try
             {
-                if(command.IsValid())
+                var validation = new CreateBookCommandValidation(_repositoryProvider, command);
+
+                if (validation.IsValid())
                 {
-                    if (_repositoryProvider.Author.Load().FirstOrDefault(m => m.ID == command.AuthorID) == null)
-                    {
-                        response.Status = 404;
-                        throw new Exception("Author Not Found");
-                    }
-
-                    if (_repositoryProvider.Book.Load().Any(m => m.ISBM == command.ISBM))
-                    {
-                        response.Status = 400;
-                        throw new Exception("ISBM already exists");
-                    }
-
                     var book = _repositoryProvider.Book.Add(new Book()
                     {
                         AuthorID = command.AuthorID,
@@ -68,12 +58,13 @@ namespace BKM.Core.Commands
                 else
                 {
                     response.Status = 400;
-                    response.Message = "Invalid Command";
+                    response.Message = string.Join("; ", validation.Errors);
                 }
 
             }
             catch (Exception ex)
             {
+                response.Status = 500;
                 response.Message = ex.Message;
             }
 
@@ -88,7 +79,7 @@ namespace BKM.Core.Commands
 
         private void UpdateCache(Book book)
         {
-            _cache.Set(CacheKeys.Books, _repositoryProvider.Author.Load().ToList());
+            _cache.Set(CacheKeys.Books, _repositoryProvider.Book.Load().ToList());
         }
         private void SendToServiceBus(Book book)
         {

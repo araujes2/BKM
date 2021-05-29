@@ -9,12 +9,12 @@ using System;
 
 namespace EDAP.Infrastructure.Repositories
 {
-    public class RepositoryProvider : IRepositoryProvider, IDisposable
+    public class RepositoryProvider : IRepositoryProvider
     {
         private readonly DbContext _dbContext;
-        public RepositoryProvider(string connectionString)
+        public RepositoryProvider(DbContextOptions options)
         {
-            _dbContext = new BKMContext(connectionString);
+            _dbContext = new BKMContext(options);
         }
         public IUnitOfWork UoW => new UnitOfWork(_dbContext);
         public IBookRepository Book => new BookRepository(_dbContext);

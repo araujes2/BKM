@@ -27,21 +27,17 @@ namespace BKM.Core.Commands
         {
             var response = new CreateAuthorResponse()
             {
-                Status = 200,
+                Status = 201,
                 Date = DateTime.Now,
                 Message = "Successful"
             };
 
             try
             {
-                if(command.IsValid())
-                {
-                    if (_repositoryProvider.Author.Load().Any(m => m.ID == command.ID))
-                    {
-                        response.Status = 400;
-                        throw new Exception("Althor already exists");
-                    }
+                var validation = new CreateAuthorCommandValidation(_repositoryProvider, command);
 
+                if (validation.IsValid())
+                {
                     var author = _repositoryProvider.Author.Add(new Author()
                     {
                         ID = command.ID,
@@ -58,12 +54,13 @@ namespace BKM.Core.Commands
                 else
                 {
                     response.Status = 400;
-                    response.Message = "Invalid Command";
+                    response.Message = string.Join("; ", validation.Errors);
                 }
 
             }
             catch(Exception ex)
             {
+                response.Status = 500;
                 response.Message = ex.Message;
             }
 

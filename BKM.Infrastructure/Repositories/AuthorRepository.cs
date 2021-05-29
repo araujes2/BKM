@@ -12,6 +12,11 @@ namespace BKM.Infrastructure.Repositories
         {
         }
 
-     
+        public override IQueryable<Author> Load()
+        {
+            return _context.Set<Author>().Include(m => m.Books).AsNoTracking();
+        }
+
+
     }
 }
