@@ -1,12 +1,7 @@
-using BKM.API;
 using BKM.API.Utilities;
-using BKM.Core.Interfaces;
-using BKM.Infrastructure.EntityFramework;
-using EDAP.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,11 +24,9 @@ namespace BKM.API
 
             var options = serviceConfiguration.Get<ServiceOptions>();
 
-            var dbOptions = new DbContextOptionsBuilder<BKMContext>()
-               .UseSqlServer(options.SqlConnectionString)
-               .Options;
+            services.AddRepository(options);
 
-            services.AddScoped<IRepositoryProvider>(s => new RepositoryProvider(dbOptions));
+            services.AddScoped<QueueMessageActionFilter>();
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
@@ -41,7 +34,9 @@ namespace BKM.API
 
             services.AddMemoryCache();
 
-            services.AddScoped<QueueMessageActionFilter>();
+            services.AddCustomAuthentication(options);
+
+            services.AddCors();
 
             services.AddControllers();
         }
@@ -55,6 +50,12 @@ namespace BKM.API
 
             app.UseRouting();
 
+            app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -11,11 +11,13 @@ using BKM.Core.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using BKM.Core.Commands;
 using BKM.API.Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BKM.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthorsController : ControllerBase
     {
         private readonly ILogger _logger;

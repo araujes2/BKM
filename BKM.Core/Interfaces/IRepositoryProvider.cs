@@ -8,5 +8,6 @@ namespace BKM.Core.Interfaces
         IUnitOfWork UoW { get; }
         IBookRepository Book { get; }
         IAuthorRepository Author { get; }
+        IUserRepository User { get; }
     }
 }

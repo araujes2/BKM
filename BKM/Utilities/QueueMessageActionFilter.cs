@@ -15,7 +15,7 @@ namespace BKM.API.Utilities
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             var result = (ObjectResult)context.Result;
-            if (result.StatusCode == 200)
+            if (result.StatusCode == 201)
             {
                 var queue = new QueueClient(_options.StorageConnectionString, _options.QueueName);
                 queue.CreateIfNotExistsAsync().GetAwaiter().GetResult();

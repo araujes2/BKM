@@ -1,9 +1,6 @@
 
 using BKM.Core.Commands;
 using BKM.Core.Generic;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
@@ -15,22 +12,13 @@ using System.Threading.Tasks;
 namespace BKM.API.Tests
 {
     [TestFixture]
-    public class BooksControllerTest
+    public class BooksControllerTest : ControllerTestBase
     {
-        private TestServer _server;
-        private HttpClient _client;
 
         [SetUp]
         public void Setup()
         {
-            _server = new TestServer(new WebHostBuilder()
-               .ConfigureAppConfiguration((hostingContext, config) =>
-               {
-                   config.AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true);
-               })
-               .UseEnvironment("Developmenet")
-               .UseStartup<Startup>());
-            _client = _server.CreateClient();
+            ConfigureServer();
         }
 
         [Test]

@@ -19,6 +19,7 @@ namespace EDAP.Infrastructure.Repositories
         public IUnitOfWork UoW => new UnitOfWork(_dbContext);
         public IBookRepository Book => new BookRepository(_dbContext);
         public IAuthorRepository Author => new AuthorRepository(_dbContext);
+        public IUserRepository User => new UserRepository(_dbContext);
 
         public void Dispose()
         {
