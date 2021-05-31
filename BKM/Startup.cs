@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Reflection;
 
 namespace BKM.API
@@ -26,9 +27,7 @@ namespace BKM.API
 
             services.AddRepository(options);
 
-            services.AddScoped<QueueMessageActionFilter>();
-
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatR(AppDomain.CurrentDomain.Load("BKM.Core"), AppDomain.CurrentDomain.Load("BKM.Infrastructure"));
 
             services.AddAutoMapper(typeof(Startup));
 

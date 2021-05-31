@@ -2,6 +2,7 @@
 using BKM.Core.Interfaces;
 using BKM.Infrastructure.EntityFramework;
 using EDAP.Infrastructure.Repositories;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,11 @@ namespace BKM.API
 
             services.AddScoped<IRepositoryProvider>(s => new RepositoryProvider(dbOptions));
             return services;
+        }
+
+        public static IServiceCollection RegisterRequestHandlers(this IServiceCollection services)
+        {
+            return services.AddMediatR(typeof(ServiceConfigurationExtensions).Assembly);
         }
 
         public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, ServiceOptions options)

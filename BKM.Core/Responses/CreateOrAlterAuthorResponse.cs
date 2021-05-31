@@ -3,7 +3,7 @@ using BKM.Core.Generic;
 
 namespace BKM.Core.Responses
 {
-    public class CreateAuthorResponse : ResponseBase
+    public class CreateOrAlterAuthorResponse : ResponseBase
     {
         public DtoAuthor Result { get; set; }
     }

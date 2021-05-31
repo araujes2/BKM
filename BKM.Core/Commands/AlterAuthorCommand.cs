@@ -6,7 +6,7 @@ using System;
 
 namespace BKM.Core.Commands
 {
-    public class CreateAuthorCommand : IRequest<CreateOrAlterAuthorResponse>
+    public class AlterAuthorCommand : IRequest<CreateOrAlterAuthorResponse>
     {
         public string ID { get; set; }
         public string Name { get; set; }

@@ -14,7 +14,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Book3", "TitleB3", BookCategory.Category1, "01/20/2012", "Author1")]
+        [TestCase("Book3", "TitleB3", BookCategory.Category1, "01/20/2012", "00852760302")]
         public void Is_valid_book(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()
@@ -30,7 +30,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Book1", "TitleB1", BookCategory.Category1, "01/20/2012", "Author1")]
+        [TestCase("Book1", "TitleB1", BookCategory.Category1, "01/20/2012", "00852760302")]
         public void Is_not_valid_when_book_exists(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()
@@ -66,7 +66,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("", "TitleB3", BookCategory.Category1, "01/20/2012", "Author1")]
+        [TestCase("", "TitleB3", BookCategory.Category1, "01/20/2012", "00852760302")]
         public void Is_not_valid_when_ISBM_is_null_or_empty(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()
@@ -84,7 +84,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Book3", "", BookCategory.Category1, "01/20/2012", "Author1")]
+        [TestCase("Book3", "", BookCategory.Category1, "01/20/2012", "00852760302")]
         public void Is_not_valid_when_title_is_null_or_empty(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()

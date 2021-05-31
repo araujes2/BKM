@@ -10,8 +10,9 @@ using BKM.Core.Entities;
 using BKM.Core.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using BKM.Core.Commands;
-using BKM.API.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using BKM.Core.Notifications;
+using Microsoft.Extensions.Options;
 
 namespace BKM.API.Controllers
 {
@@ -22,16 +23,17 @@ namespace BKM.API.Controllers
     {
         private readonly ILogger _logger;
         private readonly IRepositoryProvider _repositoryProvider;
-        public AuthorsController([FromServices] IRepositoryProvider repositoryProvider, ILogger<AuthorsController> logger)
+        public AuthorsController(IRepositoryProvider repositoryProvider, ILogger<AuthorsController> logger)
         {
             _logger = logger;
             _repositoryProvider = repositoryProvider;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Author>> Get([FromServices] IMemoryCache cache)
+        public async Task<IEnumerable<Author>> GetAsync([FromServices] IMemoryCache cache)
         {
             _logger.LogInformation($"Executing [GET] api/authors at { DateTime.Now  }");
+
             return await cache.GetOrCreateAsync(CacheKeys.Authors, entry =>
             {
                 return _repositoryProvider.Author.Load().ToListAsync();
@@ -39,23 +41,49 @@ namespace BKM.API.Controllers
         }
 
         [HttpGet("{ID}", Name = "GetAuthor")]
-        public async Task<IActionResult> Get([FromQuery] string ID)
+        public async Task<IActionResult> GetAsync([FromQuery] string ID)
         {
             _logger.LogInformation($"Executing [GET] api/authors/{ID} at { DateTime.Now  }");
-            return Ok(await _repositoryProvider.Author.Load().FirstOrDefaultAsync(m => m.ID == ID));
+
+            var output = await _repositoryProvider.Author.Load().FirstOrDefaultAsync(m => m.ID == ID);
+
+            return Ok(output);
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(QueueMessageActionFilter))]
-        public async Task<IActionResult> Post([FromServices] IMediator mediator, [FromBody] CreateAuthorCommand command)
+        public async Task<IActionResult> PostAsync([FromServices] IMediator mediator, [FromServices] IOptions<ServiceOptions> options, [FromBody] CreateAuthorCommand command)
         {
             _logger.LogInformation($"Executing [POST] api/authors at { DateTime.Now  }");
+
+            command.Today = DateTime.Today;
+
             var output = await mediator.Send(command);
+
+            await mediator.Publish(new CreateEntityNotification
+            {
+                Entity = "Author",
+                Object = output.Result,
+                QueueName = options.Value.QueueName,
+                StorageConnectionString = options.Value.StorageConnectionString
+            });
+
             return StatusCode(output.Status, output);
         }
 
-        [HttpDelete("{ID}")]
-        public async Task<IActionResult> Delete([FromServices] IMediator mediator, [FromQuery] DeleteAuthorCommand command)
+        [HttpPut]
+        public async Task<IActionResult> PutAsync([FromServices] IMediator mediator, [FromBody] AlterAuthorCommand command)
+        {
+            _logger.LogInformation($"Executing [PUT] api/authors at { DateTime.Now  }");
+
+            command.Today = DateTime.Today;
+
+            var output = await mediator.Send(command);
+
+            return StatusCode(output.Status, output);
+        }
+
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteAsync([FromServices] IMediator mediator, [FromBody] DeleteAuthorCommand command)
         {
             _logger.LogInformation($"Executing [DELETE] api/authors/{command.ID} at { DateTime.Now  }");
             var output = await mediator.Send(command);

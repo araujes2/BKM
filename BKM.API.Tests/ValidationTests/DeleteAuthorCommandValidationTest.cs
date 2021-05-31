@@ -12,7 +12,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Author2")]
+        [TestCase("00346255341")]
         public void Is_valid(string ID)
         {
             var command = new DeleteAuthorCommand()
@@ -38,7 +38,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Author1")]
+        [TestCase("00852760302")]
         public void Is_not_valid_when_author_has_books(string ID)
         {
             var command = new DeleteAuthorCommand()

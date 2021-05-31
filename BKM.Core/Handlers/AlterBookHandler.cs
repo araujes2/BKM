@@ -13,41 +13,42 @@ using System.Threading.Tasks;
 
 namespace BKM.Core.Handlers
 {
-    public class CreateAuthorHandler : ICreateAuthorHandler
+    public class AlterBookHandler : IAlterBookHandler
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IMemoryCache _cache;
         private readonly IMapper _mapper;
-        public CreateAuthorHandler(IRepositoryProvider repositoryProvider, IMapper mapper, IMemoryCache cache)
+        public AlterBookHandler(IRepositoryProvider repositoryProvider, IMapper mapper, IMemoryCache cache)
         {
             _repositoryProvider = repositoryProvider;
             _mapper = mapper;
             _cache = cache;
         }
 
-        public async Task<CreateOrAlterAuthorResponse> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
+        public async Task<CreateOrAlterBookResponse> Handle(AlterBookCommand command, CancellationToken cancellationToken)
         {
-            var response = new CreateOrAlterAuthorResponse()
+            var response = new CreateOrAlterBookResponse()
             {
-                Status = 201,
+                Status = 200,
                 Date = DateTime.Now,
+                Requester = "",
                 Message = "Successful"
             };
 
             try
             {
-                var validation = new CreateAuthorCommandValidation(_repositoryProvider, command);
+                var validation = new AlterBookCommandValidation(_repositoryProvider, command);
 
                 if (validation.IsValid())
                 {
+                    var book = _mapper.Map<Book>(command);
+                    _repositoryProvider.Book.Edit(book);
 
-                    var author = _mapper.Map<Author>(command);
-                    _repositoryProvider.Author.Add(author);
                     await _repositoryProvider.UoW.SaveChangesAsync();
 
-                    OnAuthorAdded(author);
+                    OnBookAltered(book);
 
-                    response.Result = _mapper.Map<DtoAuthor>(author);
+                    response.Result = _mapper.Map<DtoBook>(book);
                 }
                 else
                 {
@@ -56,19 +57,18 @@ namespace BKM.Core.Handlers
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.Status = 500;
                 response.Message = ex.Message;
             }
 
             return await Task.FromResult(response);
-
         }
 
-        private void OnAuthorAdded(Author author)
+        private void OnBookAltered(Book book)
         {
-            _cache.Set(CacheKeys.Authors, _repositoryProvider.Author.Load().ToList());
+            _cache.Set(CacheKeys.Books, _repositoryProvider.Book.Load().ToList());
         }
     }
 }

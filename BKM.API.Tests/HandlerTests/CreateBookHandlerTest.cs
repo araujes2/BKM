@@ -20,7 +20,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Book3", "TitleB3", BookCategory.Category1, "01/20/2012", "Author1")]
+        [TestCase("Book3", "TitleB3", BookCategory.Category1, "01/20/2012", "00852760302")]
         public async Task Can_add_book_HTTP201(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()
@@ -36,7 +36,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Book1", "TitleB1", BookCategory.Category1, "01/20/2012", "Author1")]
+        [TestCase("Book1", "TitleB1", BookCategory.Category1, "01/20/2012", "00852760302")]
         public async Task Cannot_add_existing_book_HTTP400(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()

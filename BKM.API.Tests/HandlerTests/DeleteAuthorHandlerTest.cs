@@ -19,7 +19,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Author2")]
+        [TestCase("00346255341")]
         public async Task Can_delete_author_HTTP200(string ID)
         {
             var command = new DeleteAuthorCommand()
@@ -32,7 +32,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Author1")]
+        [TestCase("00852760302")]
         public async Task Cannot_delete_author_with_books_HTTP400(string ID)
         {
             var command = new DeleteAuthorCommand()

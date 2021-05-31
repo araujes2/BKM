@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BKM.Core.Interfaces
 {
-    public interface ICreateAuthorHandler : IRequestHandler<CreateAuthorCommand, CreateOrAlterAuthorResponse>
+    public interface IAlterAuthorHandler : IRequestHandler<AlterAuthorCommand, CreateOrAlterAuthorResponse>
     {
 
     }

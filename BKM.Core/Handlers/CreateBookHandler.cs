@@ -5,7 +5,6 @@ using BKM.Core.Entities;
 using BKM.Core.Generic;
 using BKM.Core.Interfaces;
 using BKM.Core.Responses;
-using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Linq;
@@ -26,9 +25,9 @@ namespace BKM.Core.Handlers
             _cache = cache;
         }
 
-        public async Task<CreateBookResponse> Handle(CreateBookCommand command, CancellationToken cancellationToken)
+        public async Task<CreateOrAlterBookResponse> Handle(CreateBookCommand command, CancellationToken cancellationToken)
         {
-            var response = new CreateBookResponse()
+            var response = new CreateOrAlterBookResponse()
             {
                 Status = 201,
                 Date = DateTime.Now,
@@ -42,14 +41,8 @@ namespace BKM.Core.Handlers
 
                 if (validation.IsValid())
                 {
-                    var book = _repositoryProvider.Book.Add(new Book()
-                    {
-                        AuthorID = command.AuthorID,
-                        Category = command.Category,
-                        ISBM = command.ISBM,
-                        LaunchDate = command.LaunchDate,
-                        Title = command.Title
-                    });
+                    var book = _mapper.Map<Book>(command);
+                    _repositoryProvider.Book.Add(book);
 
                     await _repositoryProvider.UoW.SaveChangesAsync();
 

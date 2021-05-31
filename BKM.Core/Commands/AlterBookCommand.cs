@@ -6,7 +6,7 @@ using System;
 
 namespace BKM.Core.Commands
 {
-    public class CreateBookCommand : IRequest<CreateOrAlterBookResponse>
+    public class AlterBookCommand : IRequest<CreateOrAlterBookResponse>
     {
         public string ISBM { get; set; }
         public string Title { get; set; }

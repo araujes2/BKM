@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BKM.Core.Interfaces
 {
-    public interface ICreateBookHandler : IRequestHandler<CreateBookCommand, CreateBookResponse>
+    public interface ICreateBookHandler : IRequestHandler<CreateBookCommand, CreateOrAlterBookResponse>
     {
     }
 }

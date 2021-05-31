@@ -13,39 +13,39 @@ using System.Threading.Tasks;
 
 namespace BKM.Core.Handlers
 {
-    public class CreateAuthorHandler : ICreateAuthorHandler
+    public class AlterAuthorHandler : IAlterAuthorHandler
     {
         private readonly IRepositoryProvider _repositoryProvider;
         private readonly IMemoryCache _cache;
         private readonly IMapper _mapper;
-        public CreateAuthorHandler(IRepositoryProvider repositoryProvider, IMapper mapper, IMemoryCache cache)
+        public AlterAuthorHandler(IRepositoryProvider repositoryProvider, IMapper mapper, IMemoryCache cache)
         {
             _repositoryProvider = repositoryProvider;
             _mapper = mapper;
             _cache = cache;
         }
 
-        public async Task<CreateOrAlterAuthorResponse> Handle(CreateAuthorCommand command, CancellationToken cancellationToken)
+        public async Task<CreateOrAlterAuthorResponse> Handle(AlterAuthorCommand command, CancellationToken cancellationToken)
         {
             var response = new CreateOrAlterAuthorResponse()
             {
-                Status = 201,
+                Status = 200,
                 Date = DateTime.Now,
                 Message = "Successful"
             };
 
             try
             {
-                var validation = new CreateAuthorCommandValidation(_repositoryProvider, command);
+                var validation = new AlterAuthorCommandValidation(_repositoryProvider, command);
 
                 if (validation.IsValid())
                 {
 
                     var author = _mapper.Map<Author>(command);
-                    _repositoryProvider.Author.Add(author);
+                    _repositoryProvider.Author.Edit(author);
                     await _repositoryProvider.UoW.SaveChangesAsync();
 
-                    OnAuthorAdded(author);
+                    OnAuthorAltered(author);
 
                     response.Result = _mapper.Map<DtoAuthor>(author);
                 }
@@ -66,7 +66,7 @@ namespace BKM.Core.Handlers
 
         }
 
-        private void OnAuthorAdded(Author author)
+        private void OnAuthorAltered(Author author)
         {
             _cache.Set(CacheKeys.Authors, _repositoryProvider.Author.Load().ToList());
         }

@@ -38,7 +38,8 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Book3", "TitleB3", BookCategory.Category1, "01/20/2012", "Author1")]
+        [Order(1)]
+        [TestCase("Book3", "TitleB3", BookCategory.Category1, "01/20/2012", "00346255341")]
         public async Task Can_add_book(string ISBM, string title, BookCategory category, DateTime launchDate, string authorID)
         {
             var command = new CreateBookCommand()
@@ -60,6 +61,30 @@ namespace BKM.API.Tests
 
             //asset
             Assert.AreEqual(HttpStatusCode.Created, response.StatusCode);
+
+        }
+
+        [Test]
+        [Order(2)]
+        [TestCase("Book3")]
+        public async Task Can_delete_book(string ISBM)
+        {
+            // arrange
+            var command = new DeleteBookCommand()
+            {
+                ISBM = ISBM
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, "api/books");
+            var contentString = JsonConvert.SerializeObject(command);
+            request.Content = new StringContent(contentString, Encoding.UTF8, "application/json");
+
+            // act
+            var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            //asset
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
         }
 

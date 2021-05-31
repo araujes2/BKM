@@ -39,14 +39,14 @@ namespace BKM.API.Tests
 
                 var a1 = new Author()
                 {
-                    ID = "Author1",
+                    ID = "00852760302",
                     Name = "NameAuthor1",
                     DateOfBirth = DateTime.Now
                 };
 
                 var a2 = new Author()
                 {
-                    ID = "Author2",
+                    ID = "00346255341",
                     Name = "NameAuthor2",
                     DateOfBirth = DateTime.Now
                 };
@@ -60,7 +60,7 @@ namespace BKM.API.Tests
 
                 var b1 = new Book()
                 {
-                    AuthorID = "Author1",
+                    AuthorID = "00852760302",
                     Category = BookCategory.Category1,
                     ISBM = "Book1",
                     Title = "TitleB1",

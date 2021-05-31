@@ -11,7 +11,7 @@ namespace BKM.Infrastructure.EntityFramework
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("BKM");
+            modelBuilder.HasDefaultSchema("dbo");
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
             modelBuilder.ApplyConfiguration(new BookConfiguration());
             base.OnModelCreating(modelBuilder);

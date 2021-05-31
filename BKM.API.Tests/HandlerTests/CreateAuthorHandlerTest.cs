@@ -12,7 +12,7 @@ namespace BKM.API.Tests
     [TestFixture]
     public class CreateAuthorHandlerTest : TestBase
     {
-        protected ICreateAuthorHandler _handler;
+        protected CreateAuthorHandler _handler;
         public CreateAuthorHandlerTest() : base()
         {
             _handler = new CreateAuthorHandler(_repositoryProvider, _mapper, new MemoryCache(new MemoryCacheOptions()));
@@ -35,7 +35,7 @@ namespace BKM.API.Tests
         }
 
         [Test]
-        [TestCase("Author1", "NameAuthor1", "09/25/1987")]
+        [TestCase("00852760302", "NameAuthor1", "09/25/1987")]
         public async Task Cannot_add_existing_author_HTTP400(string ID, string name, DateTime dateOfBirth)
         {
             var command = new CreateAuthorCommand()

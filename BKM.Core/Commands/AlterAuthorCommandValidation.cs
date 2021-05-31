@@ -9,12 +9,12 @@ using System.Text.RegularExpressions;
 
 namespace BKM.Core.Commands
 {
-    public class CreateAuthorCommandValidation
+    public class AlterAuthorCommandValidation
     {
         private readonly IRepositoryProvider _repositoryProvider;
-        private readonly CreateAuthorCommand _command;
+        private readonly AlterAuthorCommand _command;
         private readonly ICollection<string> _errors;
-        public CreateAuthorCommandValidation(IRepositoryProvider repositoryProvider, CreateAuthorCommand command)
+        public AlterAuthorCommandValidation(IRepositoryProvider repositoryProvider, AlterAuthorCommand command)
         {
             _repositoryProvider = repositoryProvider;
             _command = command;
@@ -40,13 +40,14 @@ namespace BKM.Core.Commands
                 _errors.Add("Date of Birth is lower 30 years old");
             }
 
-            if (_repositoryProvider.Author.Load().Any(m => m.ID == _command.ID))
+            if (_repositoryProvider.Author.Load().Any(m => m.ID == _command.ID) == false)
             {
-                _errors.Add("Author already exists");
+                _errors.Add("Author does not exist");
             }
 
             return _errors.Count == 0;
         }
 
+       
     }
 }
